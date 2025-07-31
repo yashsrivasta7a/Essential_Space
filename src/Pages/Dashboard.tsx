@@ -9,8 +9,6 @@ import Sidebar from "../components/ui/Sidebar";
 import { useContent } from "../hooks/useContent";
 import axios from "axios";
 
-import { CrossIcon } from "../icons/CrossIcon";
-
 function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const { contents, refresh } = useContent();

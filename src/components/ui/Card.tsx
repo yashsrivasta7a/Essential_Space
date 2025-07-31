@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect, useRef } from "react";
+import { CrossIcon } from "../../icons/CrossIcon";
 
 interface CardProps {
   id: string;
@@ -82,17 +83,16 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
               >
                 {truncateTitle(title)}
               </h3>
-
               <p className="text-xs text-gray-400 uppercase tracking-wider">{type}</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center space-x-2 opacity-60 group-hover:opacity-100 transition-opacity">
             <button
               onClick={handleDelete}
               className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all duration-200 flex items-center justify-center"
             >
-              <span className="text-xs">×</span>
+              <CrossIcon/>
             </button>
             <button
               onClick={handleShare}

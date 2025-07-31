@@ -1,7 +1,7 @@
 
 interface ShareIconProps {
     size?: "sm" | "md" | "lg"
-    onclick:()=>void;
+    onclick?:()=>void;
 }
 
 const sizeVariants = {
