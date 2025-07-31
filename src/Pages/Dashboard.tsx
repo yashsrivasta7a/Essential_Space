@@ -36,7 +36,7 @@ function Dashboard() {
   const shareURl = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/v1/brain/share",
+        "https://essential-space.onrender.com/api/v1/brain/share",
         {
           share: "true",
         },

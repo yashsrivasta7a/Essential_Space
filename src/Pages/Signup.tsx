@@ -15,7 +15,7 @@ export function SignupPage() {
 
     try {
       
-      const response = await axios.post("http://localhost:3001/api/v1/signup", {
+      const response = await axios.post("https://essential-space.onrender.com/api/v1/signup", {
         username,
         pass,
       });

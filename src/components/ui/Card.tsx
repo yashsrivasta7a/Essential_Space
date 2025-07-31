@@ -43,7 +43,7 @@ export function Card({
 
   const handleDelete = async () => {
     try {
-      await axios.delete("http://localhost:3001/api/v1/content", {
+      await axios.delete("https://essential-space.onrender.com/api/v1/content", {
         data: { contentId: id },
         headers: {
           authorization: localStorage.getItem("tokennn") || "",

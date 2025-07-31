@@ -31,7 +31,7 @@ const SharedBrain = () => {
         }
 
         const response = await fetch(
-          `http://localhost:3001/api/v1/brain/${shareLink}`
+          `https://essential-space.onrender.com/api/v1/brain/${shareLink}`
         );
 
         if (!response.ok) {

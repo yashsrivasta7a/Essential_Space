@@ -42,7 +42,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
 
     try {
       await axios.post(
-        "http://localhost:3001/api/v1/content",
+        "https://essential-space.onrender.com/api/v1/content",
         {
           title,
           type,
