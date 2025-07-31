@@ -34,7 +34,6 @@ export function Signin() {
         <div className="flex justify-center pt-4">
           <Button 
             onClick={handleSignup}
-            loading={false}
             variant="primary"
             size="md"
             text="Signup"

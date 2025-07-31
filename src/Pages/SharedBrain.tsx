@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Card } from "../components/ui/Card";
-
+import { ContentType } from "../components/CreateContentModel";
 interface Content {
   _id: string;
   title: string;
   link: string;
-  type: string;
+  type: ContentType;
 }
 
 interface SharedBrainResponse {

@@ -36,7 +36,7 @@ export function SignupPage() {
         <div className="flex justify-center pt-4">
           <Button
             onClick={handleSignup}
-            loading={false}
+
             variant="primary"
             text="Signup"
             fullWidth={true}

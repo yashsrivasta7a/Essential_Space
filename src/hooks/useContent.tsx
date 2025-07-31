@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export function useContent() {
   const [contents, setContents] = useState([]);
-  const [error, setError] = useState(null);
+
   function refresh() {
     axios
       .get("http://localhost:3001/api/v1/content", {
@@ -15,7 +15,6 @@ export function useContent() {
         setContents(res.data.content);
       })
       .catch((err) => {
-        setError(err);
         console.error("Error fetching content:", err);
       });
   }
