@@ -2,18 +2,32 @@ import axios from "axios";
 import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect, useRef } from "react";
 import { CrossIcon } from "../../icons/CrossIcon";
-
+import { ContentType } from "../CreateContentModel";
 interface CardProps {
   id: string;
   title: string;
   link: string;
-  type: "twitter" | "youtube" | "note";
+  type: ContentType;
   index?: number;
   desc?: string;
   refresh: () => void;
 }
 
-export function Card({ id, title, link, refresh, type, index = 0, desc }: CardProps) {
+declare global {
+  interface Window {
+    twttr: any;
+  }
+}
+
+export function Card({
+  id,
+  title,
+  link,
+  refresh,
+  type,
+  index = 0,
+  desc,
+}: CardProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -83,7 +97,9 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
               >
                 {truncateTitle(title)}
               </h3>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">{type}</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider">
+                {type}
+              </p>
             </div>
           </div>
 
@@ -92,7 +108,7 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
               onClick={handleDelete}
               className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all duration-200 flex items-center justify-center"
             >
-              <CrossIcon/>
+              <CrossIcon />
             </button>
             <button
               onClick={handleShare}
@@ -116,7 +132,10 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
         )}
 
         {type === "twitter" && (
-          <div ref={ref} className="w-full h-full overflow-hidden bg-slate-900/50 rounded-lg">
+          <div
+            ref={ref}
+            className="w-full h-full overflow-hidden bg-slate-900/50 rounded-lg"
+          >
             <blockquote
               className="twitter-tweet tw-align-center !m-0"
               data-theme="dark"
@@ -132,7 +151,9 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
         )}
 
         {type === "note" && (
-          <div className="text-white font-mono text-sm whitespace-pre-wrap">{desc || "No content."}</div>
+          <div className="text-white font-mono text-sm whitespace-pre-wrap">
+            {desc || "No content."}
+          </div>
         )}
       </div>
 

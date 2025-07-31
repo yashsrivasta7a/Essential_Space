@@ -4,7 +4,7 @@ import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useEffect, useRef, useState } from "react";
 
-enum ContentType {
+export enum ContentType {
   Youtube = "youtube",
   Twitter = "twitter",
   Note = "note",
