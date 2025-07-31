@@ -46,7 +46,7 @@ function Dashboard() {
           },
         }
       );
-      const uri = `http://localhost:5173/share/${res.data.hash}`;
+      const uri = `https://essentialspaceai.vercel.app/share/${res.data.hash}`;
 
       navigator.clipboard.writeText(uri);
 
