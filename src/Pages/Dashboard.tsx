@@ -9,15 +9,29 @@ import Sidebar from "../components/ui/Sidebar";
 import { useContent } from "../hooks/useContent";
 import axios from "axios";
 
+// ✅ Add proper type for each content item
+type ContentItem = {
+  _id: string;
+  type: "youtube" | "twitter" | "note"; // or use an imported enum ContentType
+  link: string;
+  title: string;
+  desc: string;
+};
+
 function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
-  const { contents, refresh } = useContent();
 
-   useEffect(() => {
+  // ✅ Type assertion added
+  const { contents, refresh } = useContent() as {
+    contents: ContentItem[];
+    refresh: () => void;
+  };
+
+  useEffect(() => {
     if (!modalOpen) {
-      refresh(); 
+      refresh();
     }
-  }, [modalOpen]);
+  }, [modalOpen, refresh]);
 
   const shareURl = async () => {
     try {
@@ -28,7 +42,7 @@ function Dashboard() {
         },
         {
           headers: {
-            authorization: localStorage.getItem("tokennn"),
+            authorization: localStorage.getItem("tokennn") || "",
           },
         }
       );
@@ -70,7 +84,6 @@ function Dashboard() {
               </p>
             </div>
             <div className="flex gap-4">
-
               <Button
                 variant="secondary"
                 size="md"
@@ -96,11 +109,13 @@ function Dashboard() {
               },
               {
                 label: "Videos",
-                value: contents?.filter((c) => c.type === "youtube").length || 0,
+                value:
+                  contents?.filter((c) => c.type === "youtube").length || 0,
               },
               {
                 label: "Tweets",
-                value: contents?.filter((c) => c.type === "twitter").length || 0,
+                value:
+                  contents?.filter((c) => c.type === "twitter").length || 0,
               },
               {
                 label: "Notes",
@@ -129,7 +144,7 @@ function Dashboard() {
 
         {contents && contents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {contents.map(({ _id, type, link, title,desc }, index) => (
+            {contents.map(({ _id, type, link, title, desc }, index) => (
               <Card
                 key={_id}
                 id={_id}

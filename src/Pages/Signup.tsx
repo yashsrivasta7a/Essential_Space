@@ -22,9 +22,10 @@ export function SignupPage() {
 
       alert(response.data.message);
       navigate("/signin");
-    } catch (e: any) {
-      console.error("❌ Signup error:", e.response?.data || e.message);
-      alert(e.response?.data?.message || "Signup failed");
+    } catch (e: unknown) {
+      const error = e as { response?: { data?: { message?: string } }; message?: string };
+      console.error("❌ Signup error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Signup failed");
     }
   };
 
@@ -36,8 +37,8 @@ export function SignupPage() {
         <div className="flex justify-center pt-4">
           <Button
             onClick={handleSignup}
-
             variant="primary"
+            size="md"
             text="Signup"
             fullWidth={true}
           />

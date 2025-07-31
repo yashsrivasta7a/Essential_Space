@@ -2,7 +2,8 @@ import axios from "axios";
 import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect, useRef } from "react";
 import { CrossIcon } from "../../icons/CrossIcon";
-import { ContentType } from "../CreateContentModel";
+import { type ContentType } from "../CreateContentModel";
+
 interface CardProps {
   id: string;
   title: string;
@@ -15,7 +16,11 @@ interface CardProps {
 
 declare global {
   interface Window {
-    twttr: any;
+    twttr?: {
+      widgets: {
+        load: (element: HTMLElement | null) => void;
+      };
+    };
   }
 }
 
@@ -68,7 +73,6 @@ export function Card({
     return str.length > length ? str.substring(0, length) + "..." : str;
   };
 
-  // Utility to extract YouTube video ID from link
   const getYouTubeVideoId = (url: string) => {
     const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:&|$)/);
     return match ? match[1] : "";
@@ -107,12 +111,14 @@ export function Card({
             <button
               onClick={handleDelete}
               className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all duration-200 flex items-center justify-center"
+              aria-label="Delete content"
             >
               <CrossIcon />
             </button>
             <button
               onClick={handleShare}
               className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-all duration-200 flex items-center justify-center"
+              aria-label="Share content link"
             >
               <ShareIcon />
             </button>

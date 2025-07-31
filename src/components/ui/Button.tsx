@@ -6,10 +6,11 @@ export interface ButtonProps {
   variant: variants;
   size: "sm" | "md" | "lg";
   text: string;
-  endIcon?: any;
+  endIcon?: React.ReactElement;
   onClick?: () => void;
   startIcon?: ReactElement;
   disabled?: boolean;
+  fullWidth?: boolean;
 }
 
 const defaultStyles = "rounded-xl border transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]";
@@ -37,7 +38,7 @@ const variantStyles = {
   }
 };
 
-export const Button = ({ variant, size, text, endIcon, onClick, startIcon, disabled = false }: ButtonProps) => {
+export const Button = ({ variant, size, text, endIcon, onClick, startIcon, disabled = false, fullWidth = false }: ButtonProps) => {
   const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (variant === 'primary') {
       e.currentTarget.style.backgroundColor = 'transparent';
@@ -62,7 +63,7 @@ export const Button = ({ variant, size, text, endIcon, onClick, startIcon, disab
 
   return (
     <button
-      className={`${defaultStyles} ${sizeStyles[size]}`}
+      className={`${defaultStyles} ${sizeStyles[size]} ${fullWidth ? 'w-full' : ''}`}
       style={variantStyles[variant]}
       onClick={onClick}
       disabled={disabled}

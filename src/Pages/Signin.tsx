@@ -20,9 +20,10 @@ export function Signin() {
       const jwt = response.data.token;
       localStorage.setItem("tokennn", jwt);
       navigate("/dashboard");
-    } catch (e: any) {
-      console.error("❌ Signup error:", e.response?.data || e.message);
-      alert(e.response?.data?.message || "Signup failed");
+    } catch (e: unknown) {
+      const error = e as { response?: { data?: { message?: string } }; message?: string };
+      console.error("❌ Signup error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Signup failed");
     }
   };
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Card } from "../components/ui/Card";
-import { ContentType } from "../components/CreateContentModel";
+import { type ContentType } from "../components/CreateContentModel";
 interface Content {
   _id: string;
   title: string;
@@ -41,8 +41,8 @@ const SharedBrain = () => {
 
         const jsonData: SharedBrainResponse = await response.json();
         setData(jsonData);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);
       }
@@ -133,10 +133,12 @@ const SharedBrain = () => {
           {content.map(({ _id, type, link, title }, index) => (
             <Card
               key={_id}
+              id={_id}
               title={title}
               type={type}
               link={link}
               index={index}
+              refresh={() => {}} // Empty function since this is read-only shared brain
             />
           ))}
         </div>

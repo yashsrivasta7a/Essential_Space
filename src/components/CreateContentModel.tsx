@@ -4,11 +4,14 @@ import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useEffect, useRef, useState } from "react";
 
-export enum ContentType {
-  Youtube = "youtube",
-  Twitter = "twitter",
-  Note = "note",
-}
+
+export const ContentType = {
+  Youtube: "youtube",
+  Twitter: "twitter", 
+  Note: "note",
+} as const;
+
+export type ContentType = typeof ContentType[keyof typeof ContentType];
 
 interface CreateContentModelProps {
   open: boolean;
