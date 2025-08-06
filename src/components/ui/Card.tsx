@@ -24,22 +24,33 @@ declare global {
   }
 }
 
-export function Card({
-  id,
-  title,
-  link,
-  refresh,
-  type,
-  index = 0,
-  desc,
-}: CardProps) {
+function showClipboardNotification(message: string) {
+  const notification = document.createElement("div");
+  notification.textContent = message;
+  notification.className =
+    "fixed top-4 right-4 bg-white text-black px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
+  document.body.appendChild(notification);
+  setTimeout(() => document.body.removeChild(notification), 3000);
+}
+
+export function Card({ id, title, link, refresh, type, index = 0, desc }: CardProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (window.twttr && window.twttr.widgets) {
-      window.twttr.widgets.load(ref.current);
+    if (type === "twitter") {
+      if (!window.twttr) {
+        const script = document.createElement("script");
+        script.src = "https://platform.twitter.com/widgets.js";
+        script.async = true;
+        script.onload = () => {
+          window.twttr?.widgets.load(ref.current);
+        };
+        document.body.appendChild(script);
+      } else {
+        window.twttr.widgets.load(ref.current);
+      }
     }
-  }, [link]);
+  }, [link, type]);
 
   const handleDelete = async () => {
     try {
@@ -58,12 +69,7 @@ export function Card({
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(link);
-      const notification = document.createElement("div");
-      notification.textContent = "Link copied to clipboard";
-      notification.className =
-        "fixed top-4 right-4 bg-white text-black px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      showClipboardNotification("Link copied to clipboard");
     } catch (error) {
       console.error("Can't share the content:", error);
     }
@@ -74,7 +80,9 @@ export function Card({
   };
 
   const getYouTubeVideoId = (url: string) => {
-    const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:&|$)/);
+    const regExp =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|embed)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
+    const match = url.match(regExp);
     return match ? match[1] : "";
   };
 
@@ -95,15 +103,10 @@ export function Card({
               </span>
             </div>
             <div>
-              <h3
-                className="font-mono text-sm text-white truncate"
-                title={title}
-              >
+              <h3 className="font-mono text-sm text-white truncate" title={title}>
                 {truncateTitle(title)}
               </h3>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
-                {type}
-              </p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider">{type}</p>
             </div>
           </div>
 
