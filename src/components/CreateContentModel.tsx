@@ -103,7 +103,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
 
         <div className="mb-8">
           <h2 className="text-2xl font-light tracking-wide mb-2">Add Content</h2>
-          <p className="text-gray-400 text-sm font-mono">Expand your digital brain</p>
+          <p className="text-gray-400 text-sm font-mono">Expand your digital space</p>
         </div>
 
         <div className="space-y-6">

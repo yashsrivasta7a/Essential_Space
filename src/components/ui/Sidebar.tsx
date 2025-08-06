@@ -114,7 +114,7 @@ export default function Sidebar() {
               <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur-md">
                 <h3 className="text-lg font-light text-white mb-3 font-mono tracking-wide">Essential Space v2.0</h3>
                 <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  We're building the next generation of digital brain management with powerful AI capabilities.
+                  We're building the next generation of digital space management with powerful AI capabilities.
                 </p>
               </div>
 

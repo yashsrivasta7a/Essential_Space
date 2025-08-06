@@ -169,7 +169,7 @@ function Dashboard() {
             </div>
             <h3 className="text-lg sm:text-xl font-light mb-2 text-center">No content yet</h3>
             <p className="text-gray-400 text-sm mb-4 sm:mb-6 text-center">
-              Start building your digital brain
+              Start building your digital space
             </p>
             <Button
               variant="primary"
