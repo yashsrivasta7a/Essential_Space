@@ -11,7 +11,7 @@ export default function Sidebar() {
 
   const handleSignout = () => {
     localStorage.removeItem('tokennn');
-    window.location.href = "/signin";
+    window.location.href = "/";
   };
 
   const handleMenuClick = (item: typeof menuItems[0]) => {
