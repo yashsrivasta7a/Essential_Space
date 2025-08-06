@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Card } from "../components/ui/Card";
-import { type ContentType } from "../components/CreateContentModel";
 
 interface Content {
-  _id: string;
-  title: string;
+   _id: string;
+  type: "youtube" | "twitter" | "note"; 
   link: string;
-  type: ContentType;
+  title: string;
+  desc: string;
 }
 
 interface SharedBrainResponse {
@@ -133,14 +133,15 @@ const SharedBrain = () => {
 
       {content.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-6 sm:pb-0">
-          {content.map(({ _id, type, link, title }, index) => (
-            <Card
-              key={_id}
-              id={_id}
-              title={title}
-              type={type}
-              link={link}
-              index={index}
+          {content.map(({ _id, type, link, title, desc }, index) => (
+              <Card
+                key={_id}
+                id={_id}
+                title={title}
+                type={type}
+                link={link}
+                desc={desc}
+                index={index}
               refresh={() => {}}
             />
           ))}
