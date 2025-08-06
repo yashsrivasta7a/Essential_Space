@@ -123,7 +123,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
             <div>
               <label className="block text-xs uppercase tracking-wider text-gray-400 mb-2">Content</label>
               <textarea
-                className="w-full bg-black border border-white/20 rounded-lg p-3 text-black-300-300 font-mono resize-y min-h-[60px]"
+                className="w-full bg-black border border-white/20 rounded-lg p-3 text-black-300 font-mono resize-y min-h-[60px]"
                 placeholder="Write your note here..."
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
@@ -134,6 +134,17 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
           <div>
             <label className="block text-xs uppercase tracking-wider text-gray-400 mb-3">Content Type</label>
             <div className="flex gap-2">
+               <button
+                onClick={() => setType(ContentType.Note)}
+                className={`flex-1 py-3 px-4 rounded-lg border transition-all duration-200 font-mono text-sm ${
+                  type === ContentType.Note
+                    ? "bg-white text-black-300 border-white"
+                    : "bg-transparent text-white border-white/20 hover:border-white/40"
+                }`}
+                type="button"
+              >
+                Note
+              </button>
               <button
                 onClick={() => setType(ContentType.Youtube)}
                 className={`flex-1 py-3 px-4 rounded-lg border transition-all duration-200 font-mono text-sm ${
@@ -155,17 +166,6 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
                 type="button"
               >
                 Twitter
-              </button>
-              <button
-                onClick={() => setType(ContentType.Note)}
-                className={`flex-1 py-3 px-4 rounded-lg border transition-all duration-200 font-mono text-sm ${
-                  type === ContentType.Note
-                    ? "bg-white text-black-300 border-white"
-                    : "bg-transparent text-white border-white/20 hover:border-white/40"
-                }`}
-                type="button"
-              >
-                Note
               </button>
             </div>
           </div>
