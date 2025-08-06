@@ -11,6 +11,7 @@ export interface ButtonProps {
   startIcon?: ReactElement;
   disabled?: boolean;
   fullWidth?: boolean;
+   className?: string;
 }
 
 const defaultStyles = "rounded-xl border transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]";

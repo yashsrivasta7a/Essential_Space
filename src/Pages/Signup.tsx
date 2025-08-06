@@ -22,7 +22,7 @@ export function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://essential-space.onrender.com/api/v1/signup", {
+      await axios.post("https://essential-space.onrender.com/api/v1/signup", {
         username,
         pass,
       });
@@ -126,7 +126,7 @@ export function SignupPage() {
           </p>
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         @media (max-width: 640px) {
           .min-h-screen {
             padding-top: 2rem;

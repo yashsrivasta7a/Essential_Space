@@ -143,7 +143,7 @@ export function Signin() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @media (max-width: 640px) {
           .min-h-screen {
             padding-top: 2rem;
