@@ -21,7 +21,7 @@ interface CreateContentModelProps {
 export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
-  const [type, setType] = useState<ContentType>(ContentType.Youtube);
+  const [type, setType] = useState<ContentType>(ContentType.Note);
   const [desc, setDesc] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -92,7 +92,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-black border border-white/20 rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl">
+      <div className="relative bg-[#000000]/90 sm:bg-[#000000]/70  border border-white/20 rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2"
