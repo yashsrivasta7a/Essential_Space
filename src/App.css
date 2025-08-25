@@ -2,3 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Target the entire scrollbar */
+::-webkit-scrollbar {
+  width: 12px;  /* width of vertical scrollbar */
+  background-color: #000000; /* track color */
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background-color: #000000;
+  border-radius: 6px;
+}
+
+/* Handle (scroll thumb) */
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* color of the thumb */
+  border-radius: 6px;     /* rounded corners */
+  border: 2px solid #000; /* padding effect */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #333;
+}
+
+/* Optional: Arrows (usually not visible in modern browsers) */
+::-webkit-scrollbar-button {
+  display: none;
+}

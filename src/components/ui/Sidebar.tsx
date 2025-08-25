@@ -85,7 +85,7 @@ export default function Sidebar() {
 
       {showRoadmapModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={closeModal} />
+          <div className="absolute inset-0 bg-black-300/80 backdrop-blur-sm" onClick={closeModal} />
           
           <div className="relative bg-black border border-white/20 rounded-2xl p-6 sm:p-8 w-full max-w-lg mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
             <button
@@ -101,8 +101,8 @@ export default function Sidebar() {
             
             <div className="mb-8 pr-8">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-mono text-lg">2.0</span>
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                  <span className="text-black-300 font-mono text-lg">1.2</span>
                 </div>
                 <h2 className="text-2xl font-light tracking-wide text-white">What's Coming Next</h2>
               </div>
@@ -144,7 +144,7 @@ export default function Sidebar() {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
+                {/* <div className="flex items-start space-x-4">
                   <div className="w-8 h-8 bg-purple-500/20 border border-purple-500/30 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                     <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -154,7 +154,7 @@ export default function Sidebar() {
                     <h4 className="font-mono text-white font-medium mb-1">Smart Categorization</h4>
                     <p className="text-gray-400 text-sm">AI-powered automatic tagging and organization of your content for better discovery.</p>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="flex items-start space-x-4">
                   <div className="w-8 h-8 bg-yellow-500/20 border border-yellow-500/30 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
@@ -184,11 +184,6 @@ export default function Sidebar() {
             </div>
 
             
-            <div className="mt-8 pt-6 border-t border-white/10 text-center">
-              <p className="text-xs text-gray-500 font-mono">
-                Stay tuned for updates on our roadmap
-              </p>
-            </div>
           </div>
         </div>
       )}

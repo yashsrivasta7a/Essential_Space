@@ -48,7 +48,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `https://essential-space.onrender.com/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
             Authorization: localStorage.getItem("tokennn") || "",
@@ -57,12 +57,12 @@ function Dashboard() {
       );
 
       const results = response.data.results.map((result: any) => ({
-        _id: result.metadata.contentId,
-        title: result.metadata.title,
-        type: result.metadata.type,
-        link: result.metadata.link,
-        desc: result.pageContent,
-      }));
+  _id: result._id,
+  title: result.title,
+  type: result.type,
+  link: result.link,
+  desc: result.desc,
+}));
 
       setSearchResults(results);
     } catch (error) {
@@ -99,7 +99,7 @@ function Dashboard() {
     setShareLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/v1/brain/share",
+        "https://essential-space.onrender.com/api/v1/brain/share",
         {
           share: "true",
         },
@@ -193,7 +193,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="mb-6 sm:mb-8">
-            <div className="relative max-w-2xl">
+            <div className="relative max-w-7xl">
               <input
                 type="text"
                 placeholder="Search your content... (e.g., 'machine learning', 'productivity tips')"

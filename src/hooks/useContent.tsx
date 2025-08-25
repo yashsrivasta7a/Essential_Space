@@ -6,7 +6,7 @@ export function useContent() {
 
   function refresh() {
     axios
-      .get("http://localhost:3001/api/v1/content", {
+      .get("https://essential-space.onrender.com/api/v1/content", {
         headers: {
           Authorization: localStorage.getItem("tokennn") || "",
         },

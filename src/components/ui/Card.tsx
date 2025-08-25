@@ -54,7 +54,7 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
 
   const handleDelete = async () => {
     try {
-      await axios.delete("http://localhost:3001/api/v1/content", {
+      await axios.delete("https://essential-space.onrender.com/api/v1/content", {
         data: { contentId: id },
         headers: {
           authorization: localStorage.getItem("tokennn") || "",
@@ -88,7 +88,7 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
 
   return (
     <div
-      className="group bg-[black/40] backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl"
+      className="group bg-[black/40] backdrop-blur-md border border-white/30 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl"
       style={{
         animationDelay: `${index * 100}ms`,
         animation: "fadeInUp 0.6s ease-out forwards",
