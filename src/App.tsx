@@ -5,6 +5,7 @@ import { Signin } from './Pages/Signin';
 import SharedBrain from './Pages/SharedBrain';
 import ProtectedRoute from './hooks/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -37,6 +38,7 @@ function App() {
           element={<ProtectedRoute element={<Dashboard />} />} 
         />
       </Routes>
+      <Analytics/>
     </Router>
   );
 }
