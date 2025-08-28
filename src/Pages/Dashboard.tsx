@@ -48,7 +48,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `https://essential-space.onrender.com/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `http://localhost:3001/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
             Authorization: localStorage.getItem("tokennn") || "",
@@ -99,7 +99,7 @@ function Dashboard() {
     setShareLoading(true);
     try {
       const res = await axios.post(
-        "https://essential-space.onrender.com/api/v1/brain/share",
+        "http://localhost:3001/api/v1/brain/share",
         {
           share: "true",
         },
