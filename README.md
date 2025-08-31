@@ -1,7 +1,7 @@
 # EssentialSpace
 
 ## Description
-EssentialSpace is a modern web application designed to streamline content management and collaboration. It provides an intuitive interface for users to create, share, and manage digital content efficiently. The project aims to solve the challenges of organizing information and facilitating teamwork in both personal and professional environments.
+EssentialSpace is a next-gen web application for intelligent note-taking and URL management, built to optimize content organization and collaboration. Powered by integrated AI, it supports semantic search and context-aware retrieval, enabling users to find and connect information effortlessly. Designed with scalability in mind, EssentialSpace combines a sleek UI with robust backend services to deliver a seamless experience with advanced features and integrations on the roadmap.
 
 ## Tech Stack
 - **Frontend:** React, TypeScript, Vite, Tailwind CSS
