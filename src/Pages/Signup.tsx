@@ -1,14 +1,46 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import axios from "axios";
+import { SignUp as ClerkSignUp, useUser as useClerkUser } from '@clerk/clerk-react';
 
 export function SignupPage() {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+    const clerkEnabled = Boolean(clerkKey);
+    const clerkUser = clerkEnabled ? useClerkUser() : undefined as any;
+
+    useEffect(() => {
+      if (clerkEnabled && clerkUser && clerkUser.isSignedIn) {
+        navigate('/dashboard');
+      }
+    }, [clerkEnabled, clerkUser, navigate]);
+
+    // If Clerk is configured, render Clerk sign-up UI as primary flow
+    if (clerkEnabled) {
+      return (
+        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
+          <div className="relative z-10 w-full max-w-md">
+            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl">
+              <div className="text-center mb-4">
+                <div className="flex items-center justify-center space-x-3 mb-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-white rounded-full flex items-center justify-center">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full"></div>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-light tracking-[0.2em]">ESSENTIAL SPACE</h1>
+                </div>
+                <p className="text-gray-400 font-mono text-sm mb-2">Create your account</p>
+              </div>
+              <ClerkSignUp routing="path" path="/signup" />
+            </div>
+          </div>
+        </div>
+      );
+    }
 
   const handleSignup = async () => {
     const username = usernameRef.current?.value || "";
@@ -22,7 +54,7 @@ export function SignupPage() {
     setLoading(true);
 
     try {
-      await axios.post("https://essential-space.onrender.com/api/v1/signup", {
+      await axios.post("http://localhost:3001/api/v1/signup", {
         username,
         pass,
       });
@@ -119,6 +151,18 @@ export function SignupPage() {
             </p>
           </div>
         </div>
+
+        {/* Clerk SignUp widget (optional) */}
+        {clerkKey && (
+          <div className="relative z-10 w-full max-w-md mt-6">
+            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl">
+              <div className="text-center mb-4">
+                <p className="text-gray-400 font-mono text-sm mb-2">Or sign up using Clerk</p>
+              </div>
+              <ClerkSignUp routing="path" path="/signup" />
+            </div>
+          </div>
+        )}
 
         <div className="text-center mt-8">
           <p className="text-xs text-gray-500 font-mono">

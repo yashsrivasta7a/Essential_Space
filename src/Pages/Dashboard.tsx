@@ -8,6 +8,7 @@ import { ShareIcon } from "../icons/ShareIcon";
 import Sidebar from "../components/ui/Sidebar";
 import { useContent } from "../hooks/useContent";
 import axios from "axios";
+import { useAuth as useClerkAuth, useUser as useClerkUser } from '@clerk/clerk-react';
 
 type ContentItem = {
   _id: string;
@@ -31,6 +32,16 @@ function Dashboard() {
     loading?: boolean;
   };
 
+  // Clerk hooks must be called at the top level of the component
+  const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+  const clerkEnabled = Boolean(clerkKey);
+  let clerkAuth: ReturnType<typeof useClerkAuth> | undefined = undefined as any;
+  let clerkUser: ReturnType<typeof useClerkUser> | undefined = undefined as any;
+  if (clerkEnabled) {
+    clerkAuth = useClerkAuth();
+    clerkUser = useClerkUser();
+  }
+
   const handleModalClose = () => {
     setModalOpen(false);
     setTimeout(() => refresh(), 100);
@@ -47,22 +58,32 @@ function Dashboard() {
     setSearchMode(true);
 
     try {
+      let token = localStorage.getItem("tokennn") || "";
+
+      if (clerkEnabled && clerkUser && clerkUser.isSignedIn && clerkAuth && clerkAuth.getToken) {
+        try {
+          token = (await clerkAuth.getToken()) || token;
+        } catch (e) {
+          // ignore and use fallback token
+        }
+      }
+
       const response = await axios.get(
-        `https://essential-space.onrender.com/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `http://localhost:3001/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
-            Authorization: localStorage.getItem("tokennn") || "",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       const results = response.data.results.map((result: any) => ({
-  _id: result._id,
-  title: result.title,
-  type: result.type,
-  link: result.link,
-  desc: result.desc,
-}));
+        _id: result._id,
+        title: result.title,
+        type: result.type,
+        link: result.link,
+        desc: result.desc,
+      }));
 
       setSearchResults(results);
     } catch (error) {
@@ -98,14 +119,24 @@ function Dashboard() {
     
     setShareLoading(true);
     try {
+      let token = localStorage.getItem("tokennn") || "";
+
+      if (clerkEnabled && clerkUser && clerkUser.isSignedIn && clerkAuth && clerkAuth.getToken) {
+        try {
+          token = (await clerkAuth.getToken()) || token;
+        } catch (e) {
+          // ignore and fallback
+        }
+      }
+
       const res = await axios.post(
-        "https://essential-space.onrender.com/api/v1/brain/share",
+        "http://localhost:3001/api/v1/brain/share",
         {
-          share: "true",
+          share: true,
         },
         {
           headers: {
-            authorization: localStorage.getItem("tokennn") || "",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

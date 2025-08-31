@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Dashboard from './Pages/Dashboard';
 import { SignupPage } from './Pages/Signup';
 import { Signin } from './Pages/Signin';
+import Landing from './Pages/Landing';
 import SharedBrain from './Pages/SharedBrain';
 import ProtectedRoute from './hooks/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
@@ -13,9 +14,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
-          element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Signin />} 
+        <Route
+          path="/"
+          element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Landing />}
         />
         
         <Route 

@@ -3,6 +3,7 @@ import { CrossIcon } from "../icons/CrossIcon";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useEffect, useRef, useState } from "react";
+import { useAuth as useClerkAuth, useUser as useClerkUser } from '@clerk/clerk-react';
 
 
 export const ContentType = {
@@ -24,6 +25,16 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
   const [type, setType] = useState<ContentType>(ContentType.Note);
   const [desc, setDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  // Clerk hooks: only call them when Clerk is enabled (import.meta.env is compile-time)
+  const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+  const clerkEnabled = Boolean(clerkKey);
+  let clerkAuth: ReturnType<typeof useClerkAuth> | undefined = undefined as any;
+  let clerkUser: ReturnType<typeof useClerkUser> | undefined = undefined as any;
+  if (clerkEnabled) {
+    // import.meta.env.* is constant at runtime for the build, so this conditional is stable
+    clerkAuth = useClerkAuth();
+    clerkUser = useClerkUser();
+  }
 
   const addContent = async () => {
     const title = titleRef.current?.value;
@@ -41,8 +52,19 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
     setLoading(true);
 
     try {
+      // Prefer Clerk token when user is signed in, otherwise fallback to legacy token
+      let token = localStorage.getItem("tokennn") || "";
+
+      if (clerkEnabled && clerkUser && clerkUser.isSignedIn && clerkAuth && clerkAuth.getToken) {
+        try {
+          token = (await clerkAuth.getToken()) || token;
+        } catch (e) {
+          // ignore and fallback
+        }
+      }
+
       await axios.post(
-        "https://essential-space.onrender.com/api/v1/content",
+        "http://localhost:3001/api/v1/content",
         {
           title,
           type,
@@ -51,7 +73,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
         },
         {
           headers: {
-            Authorization: localStorage.getItem("tokennn") || "",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

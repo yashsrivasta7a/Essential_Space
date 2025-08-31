@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { useUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
 
 export default function Sidebar() {
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [showRoadmapModal, setShowRoadmapModal] = useState(false);
+
+  const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
+  const clerkUser = clerkEnabled ? useUser() : undefined as any;
+  const clerkAuth = clerkEnabled ? useClerkAuth() : undefined as any;
 
   const menuItems = [
     { name: "My Space", icon: "◈", action: () => setActiveItem("My Space") },
@@ -10,6 +15,19 @@ export default function Sidebar() {
   ];
 
   const handleSignout = () => {
+    // If Clerk is enabled and user is signed in, use Clerk signOut
+    if (clerkEnabled && clerkUser && clerkUser.isSignedIn) {
+      const signOut = clerkAuth?.signOut || clerkAuth?.signOutAsync || undefined;
+      Promise.resolve(signOut && signOut()).then(() => {
+        localStorage.removeItem('tokennn');
+        window.location.href = "/";
+      }).catch(() => {
+        localStorage.removeItem('tokennn');
+        window.location.href = "/";
+      });
+      return;
+    }
+
     localStorage.removeItem('tokennn');
     window.location.href = "/";
   };

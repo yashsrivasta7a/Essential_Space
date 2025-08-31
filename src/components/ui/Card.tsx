@@ -3,6 +3,7 @@ import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect, useRef } from "react";
 import { CrossIcon } from "../../icons/CrossIcon";
 import { type ContentType } from "../CreateContentModel";
+import { useAuth as useClerkAuth, useUser as useClerkUser } from '@clerk/clerk-react';
 
 interface CardProps {
   id: string;
@@ -36,6 +37,16 @@ function showClipboardNotification(message: string) {
 export function Card({ id, title, link, refresh, type, index = 0, desc }: CardProps) {
   const ref = useRef<HTMLDivElement>(null);
 
+  // Clerk hooks at top-level (guarded by compile-time env flag)
+  const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+  const clerkEnabled = Boolean(clerkKey);
+  let clerkAuth: ReturnType<typeof useClerkAuth> | undefined = undefined as any;
+  let clerkUser: ReturnType<typeof useClerkUser> | undefined = undefined as any;
+  if (clerkEnabled) {
+    clerkAuth = useClerkAuth();
+    clerkUser = useClerkUser();
+  }
+
   useEffect(() => {
     if (type === "twitter") {
       if (!window.twttr) {
@@ -54,16 +65,63 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
 
   const handleDelete = async () => {
     try {
-      await axios.delete("https://essential-space.onrender.com/api/v1/content", {
+      if (!id) {
+        console.error("No content ID provided for deletion");
+        showDeleteNotification("Error: Missing content ID", "error");
+        return;
+      }
+
+      let token = localStorage.getItem("tokennn") || "";
+
+      if (clerkEnabled && clerkUser && clerkUser.isSignedIn && clerkAuth && clerkAuth.getToken) {
+        try {
+          token = (await clerkAuth.getToken()) || token;
+        } catch (e) {
+          console.error("Failed to get Clerk token:", e);
+          // fallback to stored token
+        }
+      }
+
+      if (!token) {
+        showDeleteNotification("Error: Not authenticated", "error");
+        return;
+      }
+
+      const response = await axios.delete("http://localhost:3001/api/v1/content", {
         data: { contentId: id },
         headers: {
-          authorization: localStorage.getItem("tokennn") || "",
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
       });
-      refresh();
-    } catch (error) {
+
+      if (response.data.message === "Content deleted successfully") {
+        showDeleteNotification("Content deleted successfully", "success");
+        refresh();
+      } else {
+        showDeleteNotification("Error: Failed to delete content", "error");
+      }
+    } catch (error: any) {
       console.error("Failed to delete content:", error);
+      const errorMessage = error.response?.data?.message || "Failed to delete content";
+      showDeleteNotification(`Error: ${errorMessage}`, "error");
     }
+  };
+
+  const showDeleteNotification = (message: string, type: "success" | "error" = "success") => {
+    const notification = document.createElement("div");
+    notification.textContent = message;
+    notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse ${
+      type === "success" 
+        ? "bg-green-500 text-white" 
+        : "bg-red-500 text-white"
+    }`;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 3000);
   };
 
   const handleShare = async () => {
