@@ -22,14 +22,14 @@ export function useContent() {
           }
         }
 
-        const res = await axios.get("http://localhost:3001/api/v1/content", {
+        const res = await axios.get("https://essential-space-backend.vercel.app//api/v1/content", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 =======
     axios
-      .get("http://localhost:3001/api/v1/content", {
+      .get("https://essential-space-backend.vercel.app//api/v1/content", {
         headers: {
           Authorization: localStorage.getItem("tokennn") || "",
         },

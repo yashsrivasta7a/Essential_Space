@@ -64,7 +64,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
       }
 
       await axios.post(
-        "http://localhost:3001/api/v1/content",
+        "https://essential-space-backend.vercel.app//api/v1/content",
         {
           title,
           type,

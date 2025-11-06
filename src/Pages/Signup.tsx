@@ -54,7 +54,7 @@ export function SignupPage() {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:3001/api/v1/signup", {
+      await axios.post("https://essential-space-backend.vercel.app//api/v1/signup", {
         username,
         pass,
       });

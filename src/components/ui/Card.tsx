@@ -88,9 +88,9 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
         return;
       }
 
-      const response = await axios.delete("http://localhost:3001/api/v1/content", {
+      const response = await axios.delete("https://essential-space-backend.vercel.app//api/v1/content", {
 =======
-      await axios.delete("http://localhost:3001/api/v1/content", {
+      await axios.delete("https://essential-space-backend.vercel.app//api/v1/content", {
 >>>>>>> 80cef382751b5dbc4c106793edd9930ddddd523c
         data: { contentId: id },
         headers: {

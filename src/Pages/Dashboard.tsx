@@ -69,7 +69,7 @@ function Dashboard() {
       }
 
       const response = await axios.get(
-        `http://localhost:3001/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `https://essential-space-backend.vercel.app//api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -130,7 +130,7 @@ function Dashboard() {
       }
 
       const res = await axios.post(
-        "http://localhost:3001/api/v1/brain/share",
+        "https://essential-space-backend.vercel.app//api/v1/brain/share",
         {
           share: true,
         },
