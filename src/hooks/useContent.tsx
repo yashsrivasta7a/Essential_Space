@@ -8,7 +8,7 @@ export function useContent() {
 
   function refresh() {
     axios
-      .get("https://essential-space.vercel.app/api/v1/content", {
+      .get("https://essential-space.onrender.com/api/v1/content", {
         headers: {
           Authorization: localStorage.getItem("tokennn") || "",
         },
