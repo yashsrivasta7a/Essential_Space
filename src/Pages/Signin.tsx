@@ -24,7 +24,7 @@ export function Signin() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://essential-space-backend.vercel.app/api/v1/signin", {
+      const response = await axios.post("https://essential-space.vercel.app/api/v1/signin", {
         username,
         pass,
       });
