@@ -50,7 +50,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `http://essential-space-backend.vercel.app/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `https://essential-space-backend.vercel.app/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
             Authorization: localStorage.getItem("tokennn") || "",
@@ -108,7 +108,7 @@ function Dashboard() {
     setShareLoading(true);
     try {
       const res = await axios.post(
-        "http://essential-space-backend.vercel.app/api/v1/brain/share",
+        "https://essential-space-backend.vercel.app/api/v1/brain/share",
         {
           share: "true",
         },
