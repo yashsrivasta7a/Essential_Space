@@ -1,40 +1,52 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useAuth as useClerkAuth, useUser as useClerkUser } from '@clerk/clerk-react';
+import { useCallback, useEffect, useState } from "react";
+import { useAuth as useClerkAuth, useUser as useClerkUser } from "@clerk/clerk-react";
+
+type ContentItem = {
+  _id: string;
+  type: "youtube" | "twitter" | "note";
+  link: string;
+  title: string;
+  desc: string;
+};
 
 export function useContent() {
-  const [contents, setContents] = useState([]);
-  const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
-  const clerkAuth = clerkEnabled ? useClerkAuth() : undefined as any;
-  const clerkUser = clerkEnabled ? useClerkUser() : undefined as any;
+  const [contents, setContents] = useState<ContentItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  function refresh() {
-    (async () => {
-      try {
-        let token = localStorage.getItem("tokennn") || "";
+  // Call Clerk hooks unconditionally (must be wrapped in <ClerkProvider> at app level)
+  const { getToken } = useClerkAuth();
+  const { isSignedIn } = useClerkUser();
 
-        if (clerkUser && clerkUser.isSignedIn && clerkAuth && clerkAuth.getToken) {
-          try {
-            token = (await clerkAuth.getToken()) || token;
-          } catch (e) {
-            // ignore and fallback to local token
-          }
-        }
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      let token = localStorage.getItem("tokennn") || "";
 
-        const res = await axios.get("https://essential-space-backend.vercel.app//api/v1/content", {
+      if (isSignedIn && typeof getToken === "function") {
+        const t = await getToken();
+        if (t) token = t;
+      }
+
+      const res = await axios.get(
+        "https://essential-space-backend.vercel.app/api/v1/content",
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-        setContents(res.data.content);
-      } catch (err) {
-        console.error("Error fetching content:", err);
-      }
-    })();
-  }
+        }
+      );
+      setContents(res.data.content as ContentItem[]);
+    } catch (err) {
+      console.error("Error fetching content:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [getToken, isSignedIn]);
 
   useEffect(() => {
-      refresh();
-    }, []);
-  return {contents,refresh};
+    refresh();
+  }, [refresh]);
+
+  return { contents, refresh, loading };
 }
