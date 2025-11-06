@@ -65,7 +65,6 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
 
   const handleDelete = async () => {
     try {
-<<<<<<< HEAD
       if (!id) {
         console.error("No content ID provided for deletion");
         showDeleteNotification("Error: Missing content ID", "error");
@@ -89,9 +88,6 @@ export function Card({ id, title, link, refresh, type, index = 0, desc }: CardPr
       }
 
       const response = await axios.delete("https://essential-space-backend.vercel.app//api/v1/content", {
-=======
-      await axios.delete("https://essential-space-backend.vercel.app//api/v1/content", {
->>>>>>> 80cef382751b5dbc4c106793edd9930ddddd523c
         data: { contentId: id },
         headers: {
           Authorization: `Bearer ${token}`,

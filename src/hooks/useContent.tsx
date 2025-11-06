@@ -9,7 +9,6 @@ export function useContent() {
   const clerkUser = clerkEnabled ? useClerkUser() : undefined as any;
 
   function refresh() {
-<<<<<<< HEAD
     (async () => {
       try {
         let token = localStorage.getItem("tokennn") || "";
@@ -27,15 +26,6 @@ export function useContent() {
             Authorization: `Bearer ${token}`,
           },
         });
-=======
-    axios
-      .get("https://essential-space-backend.vercel.app//api/v1/content", {
-        headers: {
-          Authorization: localStorage.getItem("tokennn") || "",
-        },
-      })
-      .then((res) => {
->>>>>>> 80cef382751b5dbc4c106793edd9930ddddd523c
         setContents(res.data.content);
       } catch (err) {
         console.error("Error fetching content:", err);

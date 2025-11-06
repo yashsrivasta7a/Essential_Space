@@ -11,7 +11,6 @@ export function Signin() {
     document.title = 'Sign in — Essential Space';
   }, []);
 
-<<<<<<< HEAD
   if (!clerkEnabled) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
@@ -23,40 +22,6 @@ export function Signin() {
       </div>
     );
   }
-=======
-    setLoading(true);
-
-    try {
-      const response = await axios.post("https://essential-space-backend.vercel.app//api/v1/signin", {
-        username,
-        pass,
-      });
-      const jwt = response.data.token;
-      localStorage.setItem("tokennn", jwt);
-      
-      const notification = document.createElement("div");
-      notification.textContent = "Welcome back!";
-      notification.className =
-        "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 2000);
-      
-      navigate("/dashboard");
-    } catch (e: unknown) {
-      const error = e as { response?: { data?: { message?: string } }; message?: string };
-      console.error("❌ Signin error:", error.response?.data || error.message);
-      
-      const notification = document.createElement("div");
-      notification.textContent = error.response?.data?.message || "Signin failed";
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
-    } finally {
-      setLoading(false);
-    }
-  };
->>>>>>> 80cef382751b5dbc4c106793edd9930ddddd523c
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
