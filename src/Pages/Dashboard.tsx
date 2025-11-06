@@ -8,6 +8,7 @@ import { ShareIcon } from "../icons/ShareIcon";
 import Sidebar from "../components/ui/Sidebar";
 import { useContent } from "../hooks/useContent";
 import axios from "axios";
+import { useToast } from "../components/ui/Toast";
 
 type ContentItem = {
   _id: string;
@@ -30,6 +31,7 @@ function Dashboard() {
     refresh: () => void;
     loading?: boolean;
   };
+  const { success, error: showError } = useToast();
 
   const handleModalClose = () => {
     setModalOpen(false);
@@ -48,7 +50,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `https://essential-space.onrender.com/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
+        `http://essential-space-backend.vercel.app/api/v1/content/search?query=${encodeURIComponent(query)}&limit=10`,
         {
           headers: {
             Authorization: localStorage.getItem("tokennn") || "",
@@ -68,6 +70,13 @@ function Dashboard() {
     } catch (error) {
       console.error("Search failed:", error);
       setSearchResults([]);
+      // show popup
+      // avoid noisy popups on debounced typing errors unless there's a real issue
+      // show a generic message
+      // Only show if query still present
+      if (query.trim()) {
+        showError("Search failed. Please try again.");
+      }
     } finally {
       setIsSearching(false);
     }
@@ -99,7 +108,7 @@ function Dashboard() {
     setShareLoading(true);
     try {
       const res = await axios.post(
-        "https://essential-space.onrender.com/api/v1/brain/share",
+        "http://essential-space-backend.vercel.app/api/v1/brain/share",
         {
           share: "true",
         },
@@ -112,31 +121,14 @@ function Dashboard() {
       const uri = `https://essentialspaceai.vercel.app/share/${res.data.hash}`;
 
       await navigator.clipboard.writeText(uri);
-      showNotification("Share link copied to clipboard!", "success");
+      success("Share link copied to clipboard!");
       
     } catch (error) {
       console.error("Failed to Share Space:", error);
-      showNotification("Failed to generate share link", "error");
+      showError("Failed to generate share link");
     } finally {
       setShareLoading(false);
     }
-  };
-
-  const showNotification = (message: string, type: "success" | "error" = "success") => {
-    const notification = document.createElement("div");
-    notification.textContent = message;
-    notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse ${
-      type === "success" 
-        ? "bg-green-500 text-white" 
-        : "bg-red-500 text-white"
-    }`;
-    
-    document.body.appendChild(notification);
-    setTimeout(() => {
-      if (document.body.contains(notification)) {
-        document.body.removeChild(notification);
-      }
-    }, 3000);
   };
 
   // Determine what content to display

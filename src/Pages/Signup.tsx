@@ -2,48 +2,74 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useToast } from "../components/ui/Toast";
 
 export function SignupPage() {
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+  const { success, error: showError } = useToast();
 
   const handleSignup = async () => {
     const username = usernameRef.current?.value || "";
     const pass = passwordRef.current?.value || "";
 
-    if (!username.trim() || !pass.trim()) {
-      alert("Please fill in all fields");
+    // Client-side validation with clear messages
+    const issues: string[] = [];
+    if (!username.trim()) issues.push("Username is required");
+    if (!pass.trim()) issues.push("Password is required");
+    if (username.trim() && username.trim().length < 6) {
+      issues.push("Username must be at least 6 characters");
+    }
+    if (pass.trim()) {
+      const strongPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!strongPass.test(pass)) {
+        issues.push(
+          "Password must be 8+ chars and include uppercase, lowercase, number, and special char"
+        );
+      }
+    }
+
+    if (issues.length) {
+      // Show each issue as its own popup
+      issues.forEach((m, i) => setTimeout(() => showError(m), i * 100));
       return;
     }
 
     setLoading(true);
 
     try {
-      await axios.post("https://essential-space.onrender.com/api/v1/signup", {
+      await axios.post("http://essential-space-backend.vercel.app/api/v1/signup", {
         username,
         pass,
       });
-      const notification = document.createElement("div");
-      notification.textContent = "Account created successfully!";
-      notification.className =
-        "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      success("Account created successfully!");
       
       navigate("/signin");
     } catch (e: unknown) {
-      const error = e as { response?: { data?: { message?: string } }; message?: string };
-      console.error("❌ Signup error:", error.response?.data || error.message);
-      
-      const notification = document.createElement("div");
-      notification.textContent = error.response?.data?.message || "Signup failed";
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      const err = e as AxiosError<{ message?: string }>;
+      console.error("❌ Signup error:", err);
+
+      if (err.response) {
+        const status = err.response.status;
+        const serverMsg = err.response.data?.message;
+        if (status === 409) {
+          showError(serverMsg || "Username already exists");
+        } else if (status === 400) {
+          // Backend collapses all zod issues into "Invalid input", provide client-side hint
+          showError(serverMsg || "Invalid input. Check username and password requirements");
+        } else if (status >= 500) {
+          showError("Server error. Please try again later");
+        } else {
+          showError(serverMsg || "Signup failed");
+        }
+      } else if (err.request) {
+        showError("Network error: Unable to reach server");
+      } else {
+        showError(err.message || "Unexpected error during signup");
+      }
     } finally {
       setLoading(false);
     }

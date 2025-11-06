@@ -3,6 +3,7 @@ import { CrossIcon } from "../icons/CrossIcon";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useEffect, useRef, useState } from "react";
+import { useToast } from "./ui/Toast";
 
 
 export const ContentType = {
@@ -24,17 +25,23 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
   const [type, setType] = useState<ContentType>(ContentType.Note);
   const [desc, setDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  const { error: showError, success } = useToast();
 
   const addContent = async () => {
     const title = titleRef.current?.value;
     const link = linkRef.current?.value;
 
-    if (!title) return;
+    if (!title || !title.trim()) {
+      showError("Title is required");
+      return;
+    }
 
-    if (type !== ContentType.Note && !link) {
+    if (type !== ContentType.Note && (!link || !link.trim())) {
+      showError("Link is required for this content type");
       return;
     }
     if (type === ContentType.Note && !desc.trim()) {
+      showError("Please write some content for your note");
       return;
     }
 
@@ -42,7 +49,7 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
 
     try {
       await axios.post(
-        "https://essential-space.onrender.com/api/v1/content",
+        "http://essential-space-backend.vercel.app/api/v1/content",
         {
           title,
           type,
@@ -61,8 +68,11 @@ export function CreateContentModel({ open, onClose }: CreateContentModelProps) {
       if (linkRef.current) linkRef.current.value = "";
       setDesc("");
       setType(ContentType.Youtube);
-    } catch (error) {
-      console.error("Failed to add content:", error);
+      success("Content added");
+    } catch (err) {
+      console.error("Failed to add content:", err);
+      const msg = (err as any)?.response?.data?.message || "Failed to add content";
+      showError(msg);
     } finally {
       setLoading(false);
     }

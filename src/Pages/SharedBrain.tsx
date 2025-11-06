@@ -38,7 +38,7 @@ const SharedBrain = () => {
       if (!shareLink) throw new Error("No share link provided");
 
       const response = await fetch(
-        `https://essential-space.onrender.com/api/v1/brain/${shareLink}`
+        `http://essential-space-backend.vercel.app/api/v1/brain/${shareLink}`
       );
 
       if (!response.ok) {

@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useToast } from "../components/ui/Toast";
 
 export function useContent() {
   const [contents, setContents] = useState([]);
+  const { error: showError } = useToast();
 
   function refresh() {
     axios
-      .get("https://essential-space.onrender.com/api/v1/content", {
+      .get("http://essential-space-backend.vercel.app/api/v1/content", {
         headers: {
           Authorization: localStorage.getItem("tokennn") || "",
         },
@@ -16,6 +18,7 @@ export function useContent() {
       })
       .catch((err) => {
         console.error("Error fetching content:", err);
+        showError("Failed to load content");
       });
   }
 

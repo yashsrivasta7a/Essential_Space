@@ -5,13 +5,17 @@ import { Signin } from './Pages/Signin';
 import SharedBrain from './Pages/SharedBrain';
 import ProtectedRoute from './hooks/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
+import { ToastProvider } from './components/ui/Toast';
+import { Toaster } from './components/ui/Toaster';
 
 function App() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Router>
-      <Routes>
+    <ToastProvider>
+      <Router>
+        <Toaster />
+        <Routes>
         <Route 
           path="/" 
           element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Signin />} 
@@ -36,8 +40,9 @@ function App() {
           path="/dashboard" 
           element={<ProtectedRoute element={<Dashboard />} />} 
         />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </ToastProvider>
   );
 }
 

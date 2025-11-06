@@ -3,55 +3,41 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../components/ui/Toast";
 
 export function Signin() {
   const navigate = useNavigate();
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const { success, error } = useToast();
 
   const handleSignin = async () => {
     const username = usernameRef.current?.value || "";
     const pass = passwordRef.current?.value || "";
     
     if (!username.trim() || !pass.trim()) {
-      const notification = document.createElement("div");
-      notification.textContent = "Please fill in all fields";
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      error("Please fill in all fields");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await axios.post("https://essential-space.onrender.com/api/v1/signin", {
+      const response = await axios.post("http://essential-space-backend.vercel.app/api/v1/signin", {
         username,
         pass,
       });
       const jwt = response.data.token;
       localStorage.setItem("tokennn", jwt);
       
-      const notification = document.createElement("div");
-      notification.textContent = "Welcome back!";
-      notification.className =
-        "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 2000);
+      success("Welcome back!");
       
       navigate("/dashboard");
     } catch (e: unknown) {
-      const error = e as { response?: { data?: { message?: string } }; message?: string };
-      console.error("❌ Signin error:", error.response?.data || error.message);
-      
-      const notification = document.createElement("div");
-      notification.textContent = error.response?.data?.message || "Signin failed";
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 animate-pulse";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      const err = e as { response?: { data?: { message?: string } }; message?: string };
+      console.error("❌ Signin error:", err.response?.data || err.message);
+      error(err.response?.data?.message || "Signin failed");
     } finally {
       setLoading(false);
     }
