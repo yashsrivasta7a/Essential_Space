@@ -14,11 +14,7 @@
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.11.0",
     "cors": "^2.8.5",
-<<<<<<< HEAD
     "dotenv": "^17.2.2",
-=======
-    "motion": "^12.23.12",
->>>>>>> 80cef382751b5dbc4c106793edd9930ddddd523c
     "react": "^18.3.1",
     "react-detect-click-outside": "^1.1.7",
     "react-dom": "^18.3.1",
